@@ -60,7 +60,7 @@ class WatermarkDetector:
         f = np.fft.fft2(gray.astype(np.float32))
         fshift = np.fft.fftshift(f)
         magnitude = np.log1p(np.abs(fshift))
-        magnitude_norm = (magnitude - magnitude.min()) / (magnitude.ptp() + 1e-9)
+        magnitude_norm = (magnitude - magnitude.min()) / (magnitude.max() - magnitude.min() + 1e-9)
 
         # Suppress DC component at center
         h, w = magnitude_norm.shape
