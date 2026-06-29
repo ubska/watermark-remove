@@ -72,7 +72,7 @@ class WatermarkDetector:
         mask_freq = np.zeros_like(fshift, dtype=complex)
         mask_freq[binary == 255] = fshift[binary == 255]
         spatial = np.abs(np.fft.ifft2(np.fft.ifftshift(mask_freq)))
-        spatial_norm = (spatial - spatial.min()) / (spatial.ptp() + 1e-9)
+        spatial_norm = (spatial - spatial.min()) / (spatial.max() - spatial.min() + 1e-9)
         spatial_bin = (spatial_norm > self.fft_threshold).astype(np.uint8) * 255
         return self._clean_mask(spatial_bin)
 
