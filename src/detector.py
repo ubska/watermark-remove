@@ -60,7 +60,7 @@ class WatermarkDetector:
         f = np.fft.fft2(gray.astype(np.float32))
         fshift = np.fft.fftshift(f)
         magnitude = np.log1p(np.abs(fshift))
-        magnitude_norm = (magnitude - magnitude.min()) / (magnitude.ptp() + 1e-9)
+        magnitude_norm = (magnitude - magnitude.min()) / (magnitude.max() - magnitude.min() + 1e-9)
 
         # Suppress DC component at center
         h, w = magnitude_norm.shape
@@ -72,7 +72,7 @@ class WatermarkDetector:
         mask_freq = np.zeros_like(fshift, dtype=complex)
         mask_freq[binary == 255] = fshift[binary == 255]
         spatial = np.abs(np.fft.ifft2(np.fft.ifftshift(mask_freq)))
-        spatial_norm = (spatial - spatial.min()) / (spatial.ptp() + 1e-9)
+        spatial_norm = (spatial - spatial.min()) / (spatial.max() - spatial.min() + 1e-9)
         spatial_bin = (spatial_norm > self.fft_threshold).astype(np.uint8) * 255
         return self._clean_mask(spatial_bin)
 
